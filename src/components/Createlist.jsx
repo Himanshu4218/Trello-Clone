@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
 import { v4 as uuid } from "uuid";
 import Lists from "./Lists";
@@ -6,8 +6,11 @@ import { useBg } from "../context/bgColorContext";
 
 const Createlist = () => {
   const [showForm, setShowForm] = useState(false);
-  const [lists, setLists] = useState([]);
+  const [lists, setLists] = useState(
+    JSON.parse(localStorage.getItem("allList")) || []
+  );
   const [list, setList] = useState("");
+  const inputRef = useRef(null);
   const { lightColor, colorIndex } = useBg();
 
   const handleSubmit = (e) => {
@@ -18,10 +21,16 @@ const Createlist = () => {
       id: uuid(),
       name: list,
     };
-    setLists([...lists, newList]);
+    const updatedList = [...lists, newList];
+    localStorage.setItem("allList", JSON.stringify(updatedList));
+    setLists(updatedList);
     setList("");
     setShowForm(false);
   };
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, [showForm]);
 
   return (
     <div className="mt-10 flex w-full p-8">
@@ -41,6 +50,7 @@ const Createlist = () => {
           className="w-[20%] bg-white flex flex-col self-start gap-2 p-2 rounded"
         >
           <textarea
+            ref={inputRef}
             type="text"
             value={list}
             onChange={(e) => setList(e.target.value)}

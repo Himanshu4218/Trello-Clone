@@ -40,7 +40,10 @@ const Sidebar = () => {
           className="flex gap-2 cursor-pointer px-3 items-center"
           onClick={() => setShowBgSidebar(true)}
         >
-          <span className="w-5 h-5" style={{ backgroundColor: bgColor }}></span>
+          <span
+            className="w-5 h-5"
+            style={{ backgroundColor: bgColor[colorIndex] }}
+          ></span>
           <span>Change Background</span>
         </div>
       </div>
